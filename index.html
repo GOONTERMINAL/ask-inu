@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>AskInu - Search the web. Find only dog.</title>
-<meta name="description" content="AskInu ($ASKINU): the web's #1 dog-only search engine, est. 1998. Search the web. Find only dog.">
+<meta name="description" content="AskInu ($ASKINU): the web's #1 dog-only search engine, est. 1998. Hold $ASKINU, get paid in $DOGE.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="AskInu ($ASKINU)">
 <meta property="og:description" content="Search the web. Find only dog.">
@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://ask-inu.vercel.app/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="AskInu ($ASKINU)">
-<meta name="twitter:description" content="Search the web. Find only dog.">
+<meta name="twitter:description" content="Search the web. Find only dog. Hold $ASKINU, get paid in $DOGE.">
 <meta name="twitter:image" content="https://ask-inu.vercel.app/assets/og.jpg">
 <meta name="theme-color" content="#0a2a9c">
 <link rel="icon" href="assets/favicon.png">
@@ -336,6 +336,44 @@ h2, h3 { margin: 0; text-wrap: balance; }
 .warn b { color: #c00030; }
 .copy { text-align: center; margin: 18px 0 0; font-size: 13px; color: #0d2b6b; }
 
+/* holder rewards */
+.rewards {
+  margin: 24px auto 0; max-width: 1000px; background: var(--face);
+  border: 2px solid; border-color: var(--hi) var(--dk) var(--dk) var(--hi); box-shadow: 6px 6px 0 rgba(20, 20, 80, 0.35);
+}
+.rw-body {
+  margin: 0 3px 3px; padding: 18px 18px 16px;
+  background: linear-gradient(180deg, #fffdf0, #fff4c4);
+  border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+}
+.rw-body h2 { font-family: var(--pixel); font-size: 30px; color: var(--hot); text-align: center; margin-bottom: 4px; }
+.rw-sub { text-align: center; margin: 0 0 16px; font-size: 16px; }
+.flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 10px; align-items: stretch; }
+.node {
+  background: #fff; padding: 12px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px;
+  border: 3px solid var(--violet); border-radius: 8px; box-shadow: inset 0 0 0 2px #fff, 4px 4px 0 rgba(30, 20, 110, 0.3);
+}
+.node .step { font-family: var(--pixel); font-size: 13px; color: #fff; background: var(--navy); padding: 1px 8px; border-radius: 999px; }
+.node img { width: 72px; height: 72px; object-fit: cover; border-radius: 6px; }
+.node h3 { font-family: var(--pixel); font-size: 20px; color: var(--navy); text-transform: uppercase; }
+.node p { margin: 0; font-size: 14px; }
+.arrow { align-self: center; font-family: var(--pixel); font-weight: 700; font-size: 44px; color: var(--pink); line-height: 1; text-shadow: 2px 2px 0 var(--navy); }
+.rule {
+  display: flex; gap: 12px; align-items: center; margin-top: 16px; padding: 10px 12px;
+  background: #fff; border: 2px dashed #c00030;
+}
+.stop {
+  flex: none; width: 46px; height: 46px; display: grid; place-items: center; color: #fff; font: 700 11px/1 var(--ui);
+  background: #d0021b; clip-path: polygon(30% 0, 70% 0, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0 70%, 0 30%);
+}
+.rule p { margin: 0; }
+.rw-foot { display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center; margin-top: 12px; font-size: 14px; }
+.rw-foot code { background: #fff; padding: 2px 6px; overflow-wrap: anywhere; min-width: 0; }
+@media (max-width: 760px) {
+  .flow { grid-template-columns: minmax(0, 1fr); }
+  .arrow { transform: rotate(90deg); justify-self: center; }
+}
+
 /* dialog */
 .dialog {
   position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 50;
@@ -554,16 +592,36 @@ h2, h3 { margin: 0; text-wrap: balance; }
       </div>
     </div>
 
+    <section class="rewards" id="rewards" aria-labelledby="rw-h">
+      <div class="titlebar"><img class="tb-ico" src="assets/globe.png" alt=""><span class="tb-title">Holder Rewards - Paid in DOGE</span><span class="tb-btns" aria-hidden="true"><i>_</i><i>&#9633;</i><i>&times;</i></span></div>
+      <div class="rw-body">
+        <h2 id="rw-h">Hold $ASKINU. Get paid in dog.</h2>
+        <p class="rw-sub">Creator fees buy $DOGE, and the DOGE goes to $ASKINU holders.</p>
+        <div class="flow">
+          <div class="node"><span class="step">STEP 1</span><img src="assets/g5.webp" alt=""><h3>Creator fees</h3><p>Every $ASKINU trade on pump.fun earns creator fees.</p></div>
+          <div class="arrow" aria-hidden="true">&rarr;</div>
+          <div class="node"><span class="step">STEP 2</span><img src="assets/dotd.webp" alt=""><h3>Buy $DOGE</h3><p>The fees are used to buy $DOGE. A dog buying a dog.</p></div>
+          <div class="arrow" aria-hidden="true">&rarr;</div>
+          <div class="node"><span class="step">STEP 3</span><img src="assets/toolbar-dog.webp" alt=""><h3>Sent to holders</h3><p>The DOGE is shared out to $ASKINU holders, in proportion to how much each wallet holds.</p></div>
+        </div>
+        <div class="rule">
+          <span class="stop" aria-hidden="true">STOP</span>
+          <p><b>No whales at the dog park.</b> Wallets holding more than 20% of supply are excluded from rewards, including the pool, the bonding curve and whales.</p>
+        </div>
+        <div class="rw-foot"><b>DOGE token paid out:</b><span id="f-doge"></span></div>
+      </div>
+    </section>
+
     <section class="notepad" id="coin" aria-labelledby="coin-h">
       <div class="titlebar"><span class="tb-title">askinu_coin.txt - Notepad</span><span class="tb-btns" aria-hidden="true"><i>&times;</i></span></div>
       <div class="np-menu" aria-hidden="true"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>S</u>earch</span><span><u>H</u>elp</span></div>
       <div class="np-body">
         <h2 id="coin-h">$ASKINU</h2>
-        <p>AskInu is the web's #1 dog-only search engine, est. 1998. Ask it anything. It returns shiba. It is also a meme coin on Solana. No roadmap, no revenue, infinite dog.</p>
+        <p>AskInu is the web's #1 dog-only search engine, est. 1998. Ask it anything. It returns shiba. It is also a meme coin on Solana. Hold it and get paid in $DOGE. No roadmap, infinite dog.</p>
         <table class="facts">
           <tr><th>Ticker</th><td id="f-ticker">$ASKINU</td></tr>
           <tr><th>Chain</th><td>Solana (pump.fun)</td></tr>
-          <tr><th>Utility</th><td>None. Pure meme.</td></tr>
+          <tr><th>Holder rewards</th><td>Creator fees buy $DOGE, which is paid to holders. Wallets over 20% of supply are excluded.</td></tr>
           <tr><th>Roadmap</th><td>Bork. Then more bork.</td></tr>
           <tr><th>Contract</th><td id="f-ca"></td></tr>
         </table>
@@ -588,6 +646,7 @@ h2, h3 { margin: 0; text-wrap: balance; }
 var CONFIG = {
   ticker: "$ASKINU",
   contract: "",
+  dogeMint: "",
   pumpfun: "",
   x: "",
   telegram: ""
@@ -754,6 +813,9 @@ var CONFIG = {
     var a = document.createElement("a"); a.className = "btn"; a.href = p[1]; a.target = "_blank"; a.rel = "noopener noreferrer"; a.textContent = p[0];
     $("clinks").appendChild(a);
   });
+
+  $("f-doge").textContent = CONFIG.dogeMint || "Mint address announced at launch. Only trust the address posted here and in the official channels.";
+  if (CONFIG.dogeMint) { $("f-doge").innerHTML = ""; var dc = document.createElement("code"); dc.textContent = CONFIG.dogeMint; $("f-doge").appendChild(dc); }
 
   /* first render */
   var start = "shiba inu";
