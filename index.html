@@ -2,231 +2,585 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="Ask Inu: search the web, find only dog. A meme coin on Solana.">
-<title>Ask Inu</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AskInu - Search the web. Find only dog.</title>
+<meta name="description" content="AskInu ($ASKINU): the web's #1 dog-only search engine, est. 1998. Search the web. Find only dog.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AskInu ($ASKINU)">
+<meta property="og:description" content="Search the web. Find only dog.">
+<meta property="og:image" content="https://askinu.netlify.app/assets/og.jpg">
+<meta property="og:url" content="https://askinu.netlify.app/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="AskInu ($ASKINU)">
+<meta name="twitter:description" content="Search the web. Find only dog.">
+<meta name="twitter:image" content="https://askinu.netlify.app/assets/og.jpg">
+<meta name="theme-color" content="#0a2a9c">
+<link rel="icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600;700&family=VT323&display=swap">
 <style>
-/* Layout: one beveled 1998 browser window centered on a teal desktop; logo and search on top, results in the middle, coin info and disclaimer below. */
+/* Layout: a Win98-era Netscape window filling the screen; inside, a sparkly cyan Geocities page in three columns
+   (paw directory | hero, search and image results | counter, dog of the day, screensavers), then a rainbow band and footer boxes. */
 :root {
-  --desktop: #008080;
-  --panel: #d4d0c8;
-  --panel-hi: #ffffff;
-  --panel-lo: #808080;
-  --panel-dk: #404040;
-  --ink: #111111;
-  --link: #0000ee;
-  --visited: #551a8b;
-  --shiba: #e8842c;
-  --shiba-dk: #b85f14;
-  --cream: #fff4d6;
-  --title-a: #000080;
-  --title-b: #1084d0;
-  --paper: #ffffff;
-  --warn: #b00020;
-  --display: "Bowlby One", "Arial Black", Impact, sans-serif;
-  --body: "Courier Prime", "Courier New", Courier, monospace;
+  --sky: #5fd3f3;
+  --sky-lt: #a6ecff;
+  --pink: #ff3fa4;
+  --hot: #d4006e;
+  --violet: #7a63e6;
+  --lav: #e9e4ff;
+  --lav-dk: #cfc6fb;
+  --navy: #0a2a9c;
+  --blue: #1f6fe0;
+  --link: #1a33d6;
+  --yellow: #ffe23a;
+  --ink: #17163a;
+  --led: #39ff14;
+  --face: #d9d8e3;
+  --hi: #ffffff;
+  --sh: #7c7b90;
+  --dk: #26253a;
+  --pixel: "Pixelify Sans", "Trebuchet MS", Verdana, sans-serif;
+  --ui: Tahoma, Verdana, "Segoe UI", Geneva, sans-serif;
+  --led-font: "VT323", "Courier New", monospace;
   color-scheme: light;
 }
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body {
-  background: var(--desktop);
+  background: var(--dk);
   color: var(--ink);
-  font-family: var(--body);
-  font-size: 16px;
-  line-height: 1.5;
-  padding-inline: 16px;
-  padding-block: 24px 40px;
+  font-family: var(--ui);
+  font-size: 15px;
+  line-height: 1.4;
+  overflow-x: hidden;
 }
+img { max-width: 100%; display: block; }
 a { color: var(--link); }
-a:visited { color: var(--visited); }
+button, input, select { font: inherit; color: inherit; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+:focus-visible { outline: 2px dotted var(--ink); outline-offset: 2px; }
+
+/* ---------- window chrome ---------- */
 .win {
-  max-width: 780px;
-  margin-inline: auto;
-  background: var(--panel);
+  max-width: 1320px;
+  margin: 0 auto;
+  background: var(--face);
   border: 2px solid;
-  border-color: var(--panel-hi) var(--panel-dk) var(--panel-dk) var(--panel-hi);
-  box-shadow: 1px 1px 0 var(--ink), 6px 6px 0 rgba(0, 0, 0, 0.35);
-  padding: 3px;
+  border-color: var(--hi) var(--dk) var(--dk) var(--hi);
+  min-height: 100vh;
 }
 .titlebar {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: linear-gradient(90deg, var(--title-a), var(--title-b));
-  color: #fff;
-  padding: 3px 6px;
-  font-weight: 700;
-  font-size: 14px;
+  display: flex; align-items: center; gap: 8px;
+  background: linear-gradient(90deg, var(--navy), var(--blue));
+  color: #fff; padding: 4px 6px; font-weight: 700; font-size: 16px;
 }
-.titlebar span.t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.titlebar .tb-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tb-ico { width: 20px; height: 20px; }
 .tb-btns { display: flex; gap: 3px; }
-.tb-btns i {
-  display: block; width: 18px; height: 16px; background: var(--panel);
-  border: 2px solid; border-color: var(--panel-hi) var(--panel-dk) var(--panel-dk) var(--panel-hi);
+.tb-btns i, .xbtn {
+  display: grid; place-items: center; width: 22px; height: 20px; font-style: normal; font-weight: 700;
+  font-size: 14px; line-height: 1; color: var(--ink); background: var(--face); cursor: default;
+  border: 2px solid; border-color: var(--hi) var(--dk) var(--dk) var(--hi); padding: 0;
 }
-.addr {
-  display: flex; gap: 8px; align-items: center;
-  padding: 6px 4px; font-size: 14px;
+.xbtn { cursor: pointer; }
+.menubar { display: flex; gap: 18px; padding: 4px 12px; font-size: 15px; flex-wrap: wrap; }
+.menubar span { cursor: default; }
+.toolbar-row {
+  display: flex; align-items: stretch; gap: 8px; padding: 4px 8px;
+  border-top: 2px solid var(--hi); border-bottom: 2px solid var(--sh);
 }
-.addr b { flex: none; }
-.addr div {
-  flex: 1; min-width: 0; background: var(--paper);
-  border: 2px solid; border-color: var(--panel-dk) var(--panel-hi) var(--panel-hi) var(--panel-dk);
-  padding: 1px 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+.toolbar { display: flex; gap: 4px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: thin; }
+.tbtn {
+  flex: none; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  min-width: 70px; padding: 4px 8px; background: transparent; border: 2px solid transparent; cursor: pointer;
 }
-.ticker {
-  background: #000; color: #39ff14; overflow: hidden; white-space: nowrap;
-  border: 2px solid; border-color: var(--panel-dk) var(--panel-hi) var(--panel-hi) var(--panel-dk);
-  font-size: 14px;
+.tbtn img { width: 36px; height: 34px; object-fit: contain; }
+.tbtn:hover { border-color: var(--hi) var(--sh) var(--sh) var(--hi); }
+.tbtn:active { border-color: var(--sh) var(--hi) var(--hi) var(--sh); }
+.throbber {
+  flex: none; width: 58px; display: grid; place-items: center; background: #000;
+  border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
 }
-.ticker p { display: inline-block; margin: 0; padding-left: 100%; animation: roll 26s linear infinite; }
-@keyframes roll { to { transform: translateX(-100%); } }
+.throbber svg { width: 34px; height: 34px; color: var(--yellow); }
+.throbber.busy svg { animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.locbar { display: flex; align-items: center; gap: 8px; padding: 6px 8px; flex-wrap: wrap; }
+.locbar .lbl { display: flex; align-items: center; gap: 6px; font-weight: 700; }
+.locbar .lbl img { width: 22px; height: 22px; }
+.loc, .quick {
+  background: #fff; border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+  padding: 3px 8px; min-height: 30px;
+}
+.loc { flex: 3 1 260px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 16px; }
+.quick { flex: 1 1 170px; min-width: 0; cursor: pointer; }
+
+/* ---------- page ---------- */
 .page {
-  background: var(--paper);
-  margin-top: 6px;
-  border: 2px solid; border-color: var(--panel-dk) var(--panel-hi) var(--panel-hi) var(--panel-dk);
-  padding: 20px 16px 24px;
+  position: relative;
+  margin: 0 6px 6px;
+  border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+  padding-inline: 16px; padding-block: 18px 28px;
+  overflow: hidden;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cpath d='M30 10 L34 26 L50 30 L34 34 L30 50 L26 34 L10 30 L26 26Z' fill='%23fff' opacity='.9'/%3E%3Cpath d='M130 90 L133 101 L144 104 L133 107 L130 118 L127 107 L116 104 L127 101Z' fill='%23fff38a'/%3E%3Cpath d='M95 150 L97 157 L104 159 L97 161 L95 168 L93 161 L86 159 L93 157Z' fill='%23ffb3e0'/%3E%3Ccircle cx='160' cy='30' r='2' fill='%23fff'/%3E%3Ccircle cx='60' cy='120' r='1.6' fill='%23fff'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 50% 30% at 15% 20%, rgba(255, 150, 220, 0.45), transparent 70%),
+    radial-gradient(ellipse 45% 30% at 90% 70%, rgba(255, 240, 150, 0.4), transparent 70%),
+    linear-gradient(180deg, var(--sky-lt), var(--sky) 45%, #7fe0f7);
 }
-.hero { text-align: center; }
-.logo { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; }
-.logo svg { width: 96px; height: 96px; flex: none; }
-.logo h1 {
-  margin: 0; font-family: var(--display); font-weight: 400;
-  font-size: clamp(44px, 12vw, 76px); line-height: 1; letter-spacing: -1px;
-  color: var(--shiba);
-  text-shadow: 3px 3px 0 var(--shiba-dk), 5px 5px 0 var(--ink);
+.layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr) 250px;
+  grid-template-areas: "left center right";
+  gap: 18px;
+  align-items: start;
 }
-.tag { margin: 10px 0 18px; font-style: italic; }
-form.ask { display: flex; flex-direction: column; align-items: center; gap: 12px; }
-.ask input[type="text"] {
-  width: min(100%, 520px); font: inherit; padding: 6px 8px; color: var(--ink); background: var(--paper);
-  border: 2px solid; border-color: var(--panel-dk) var(--panel-hi) var(--panel-hi) var(--panel-dk);
+.left { grid-area: left; display: flex; flex-direction: column; gap: 12px; }
+.center { grid-area: center; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.right { grid-area: right; display: flex; flex-direction: column; gap: 14px; padding-top: 142px; }
+
+.box {
+  background: linear-gradient(180deg, #f7f4ff, var(--lav) 60%, var(--lav-dk));
+  border: 3px solid var(--violet);
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 2px #fff, 4px 4px 0 rgba(30, 20, 110, 0.35);
 }
-.btnrow { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+h2, h3 { margin: 0; text-wrap: balance; }
+.box h3 {
+  font-family: var(--pixel); font-weight: 700; font-size: 20px; line-height: 1.1;
+  color: var(--navy); text-transform: uppercase; letter-spacing: 0.5px; text-align: center;
+}
+.paw { width: 20px; height: 20px; flex: none; color: var(--blue); }
+.paw.pink { color: var(--pink); }
+.paw.gold { color: #f4a300; }
+.heart { color: var(--pink); font-size: 22px; line-height: 1; }
+
+/* left column */
+.new { width: 190px; transform: rotate(-6deg); margin: -6px 0 -34px -6px; position: relative; z-index: 2; filter: drop-shadow(3px 3px 0 rgba(0,0,0,.25)); }
+.nav { padding: 30px 10px 10px; display: flex; flex-direction: column; }
+.nav a {
+  display: flex; align-items: center; gap: 10px; padding: 6px 6px; font-size: 20px; text-decoration: underline;
+  border-radius: 4px;
+}
+.nav a:hover { background: rgba(255, 255, 255, 0.7); }
+.nav a span { flex: 1; }
+.nav img { width: 30px; height: 28px; object-fit: contain; flex: none; }
+.pill {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px; text-decoration: none;
+  background: linear-gradient(180deg, #f1d9ff, #d7b8ff); border-color: #9a6be6;
+  font-family: var(--pixel); font-weight: 700; font-size: 19px; line-height: 1.1; color: var(--link);
+}
+.pill span { text-decoration: underline; flex: 1; }
+.pill img { width: 54px; flex: none; }
+
+/* hero */
+.hero { position: relative; }
+.hero .art { width: 100%; height: auto; filter: drop-shadow(0 4px 0 rgba(20, 30, 120, 0.25)); }
+.sticker {
+  position: absolute; left: 89%; top: 2.5%; width: 38%; max-width: none; z-index: 3;
+  filter: drop-shadow(3px 3px 0 rgba(0,0,0,.2));
+}
+
+/* search */
+.searchbox {
+  padding: 14px 14px 10px;
+  background: linear-gradient(180deg, #eef0fb, #d6d9ee);
+  border-color: #8b8fb8; border-radius: 4px;
+}
+.srow { display: flex; gap: 10px; flex-wrap: wrap; }
+.srow input {
+  flex: 1 1 260px; min-width: 0; font-family: "Courier New", Courier, monospace; font-size: 22px; padding: 6px 12px;
+  background: #fff; border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+}
 .btn {
-  font: inherit; font-weight: 700; color: var(--ink); background: var(--panel); cursor: pointer;
-  padding: 5px 14px; border: 2px solid; border-color: var(--panel-hi) var(--panel-dk) var(--panel-dk) var(--panel-hi);
-  box-shadow: inset -1px -1px 0 var(--panel-lo);
+  cursor: pointer; font-weight: 700; background: var(--face); padding: 6px 16px;
+  border: 2px solid; border-color: var(--hi) var(--dk) var(--dk) var(--hi);
+  box-shadow: inset -1px -1px 0 var(--sh);
 }
-.btn:active { border-color: var(--panel-dk) var(--panel-hi) var(--panel-hi) var(--panel-dk); padding: 6px 13px 4px 15px; }
-.btn:focus-visible, .ask input:focus-visible, a:focus-visible { outline: 2px dotted var(--ink); outline-offset: 2px; }
-.results { margin-top: 26px; border-top: 2px solid var(--ink); padding-top: 12px; }
-.stats { font-size: 14px; background: #d6e4ff; padding: 3px 8px; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
-.dym { margin: 14px 0 0; }
-.hit { margin: 18px 0 0; }
-.hit h3 { margin: 0; font-size: 18px; font-weight: 700; }
-.hit .url { color: #006400; font-size: 14px; overflow-wrap: anywhere; }
-.hit p { margin: 2px 0 0; }
-.sponsor { background: var(--cream); border: 1px dashed var(--shiba-dk); padding: 8px 10px; margin-top: 18px; }
-.sponsor small { display: block; color: var(--panel-dk); }
-.more { margin-top: 18px; text-align: center; font-size: 15px; }
-.more a { margin-inline: 4px; }
-h2 {
-  font-family: var(--display); font-weight: 400; font-size: 26px; margin: 34px 0 10px;
-  color: var(--shiba-dk); text-wrap: balance;
+.btn:active { border-color: var(--dk) var(--hi) var(--hi) var(--dk); box-shadow: inset 1px 1px 0 var(--sh); }
+.btn.big { font-family: var(--pixel); font-size: 24px; padding: 4px 34px; }
+.modes { border: 0; margin: 10px 0 0; padding: 0; display: flex; gap: 6px 22px; flex-wrap: wrap; font-size: 17px; }
+.modes label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+.modes input { width: 17px; height: 17px; accent-color: var(--navy); margin: 0; }
+
+/* results window */
+.results { background: var(--face); border: 2px solid; border-color: var(--hi) var(--dk) var(--dk) var(--hi); padding: 3px; }
+.rbar {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  background: linear-gradient(90deg, var(--navy), var(--blue)); color: #fff; padding: 4px 6px 4px 10px;
 }
-hr.rule { border: 0; height: 4px; background: repeating-linear-gradient(90deg, var(--shiba) 0 12px, var(--ink) 12px 16px); margin: 30px 0 0; }
-.facts {
-  width: 100%; border-collapse: collapse; font-size: 15px;
+.rbar h2 { font-size: 19px; font-weight: 700; flex: 1 1 220px; min-width: 0; overflow-wrap: anywhere; }
+.rbar .count { flex: 1 1 auto; }
+.rbar .count { font-size: 14px; }
+.rgrid-wrap {
+  background: #fff; margin-top: 3px; padding: 10px; max-height: 262px; overflow-y: scroll;
+  border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+  scrollbar-color: #b9b8c9 #ebeaf2;
 }
-.facts th, .facts td { border: 2px solid; border-color: var(--panel-lo) var(--panel-hi) var(--panel-hi) var(--panel-lo); padding: 6px 10px; text-align: left; vertical-align: top; }
-.facts th { background: var(--panel); width: 34%; }
+.rgrid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; }
+.tile {
+  position: relative; aspect-ratio: 1; max-width: 100%; padding: 0; cursor: pointer; background: #fff;
+  border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+}
+.tile img { width: 100%; height: 100%; object-fit: cover; }
+.tile:hover img { transform: rotate(-3deg) scale(1.05); transition: transform 0.15s; }
+.rgrid.videos .tile::after {
+  content: ""; position: absolute; inset: 0; margin: auto; width: 34px; height: 34px; border-radius: 50%;
+  background: rgba(0, 0, 0, 0.55) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M7 5l9 5-9 5z' fill='%23fff'/%3E%3C/svg%3E") center/60% no-repeat;
+}
+.rgrid.fresh .tile { animation: pop 0.35s both; }
+@keyframes pop { from { transform: scale(0.6); opacity: 0.3; } to { transform: none; opacity: 1; } }
+
+/* right column */
+.counterbox { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 8px; }
+.leds { display: flex; align-items: center; justify-content: center; gap: 4px; }
+.leds .paw { width: 16px; height: 16px; }
+.led {
+  font-family: var(--led-font); font-size: 36px; line-height: 1; color: var(--led); background: #000;
+  padding: 2px 6px; letter-spacing: 1px; border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+  font-variant-numeric: tabular-nums;
+}
+.dotd { padding: 10px; background: linear-gradient(180deg, #eef3ff, #c8d7ff); border-color: #6f86e8; }
+.dotd h3 { margin-bottom: 8px; }
+.dotd img { width: 100%; border: 3px solid #fff; outline: 2px solid #6f86e8; }
+.dotd p { margin: 8px 0 0; font-family: "Comic Sans MS", "Comic Neue", var(--pixel); font-size: 16px; color: var(--navy); display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+.savers { padding: 10px; background: linear-gradient(180deg, #fffbd0, #ffe98a); border-color: #f0b400; }
+.savers h3 { color: var(--ink); margin-bottom: 8px; }
+.savers .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.savers .pair img { width: 100%; border: 2px solid var(--violet); }
+.btn.dl {
+  width: 100%; margin-top: 10px; font-family: var(--pixel); font-size: 20px; text-transform: uppercase;
+  color: var(--hot); background: linear-gradient(180deg, #fff, #ffd6f0); border-color: var(--pink) #9a0050 #9a0050 var(--pink);
+}
+
+/* rainbow band */
+.band {
+  display: grid; grid-template-columns: 250px minmax(0, 1fr) 170px; gap: 14px; align-items: end; margin-top: 20px;
+}
+.construction { width: 100%; }
+.rainbow { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.rlinks {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 14px; align-items: center;
+  font-family: var(--pixel); font-size: 22px; padding: 6px 10px;
+  background: linear-gradient(90deg, rgba(255,160,220,.65), rgba(255,240,160,.65), rgba(160,255,200,.65), rgba(160,200,255,.65), rgba(220,160,255,.65));
+  border-radius: 999px;
+}
+.rlinks a { color: #3a2cb8; text-decoration: none; cursor: pointer; }
+.rlinks a:hover { text-decoration: underline; }
+.rlinks i { font-style: normal; color: var(--pink); font-size: 14px; }
+.runners {
+  height: 62px; background: url("assets/runners.webp") repeat-x 0 0 / auto 62px;
+  animation: run 22s linear infinite; border-radius: 6px;
+}
+@keyframes run { to { background-position: -735px 0; } }
+.paws {
+  height: 22px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='99' height='22'%3E%3Cg fill='%233a6df0'%3E%3Cellipse cx='11' cy='15' rx='5' ry='4.5'/%3E%3Ccircle cx='5.5' cy='8.5' r='2.2'/%3E%3Ccircle cx='9' cy='5' r='2.2'/%3E%3Ccircle cx='13' cy='5' r='2.2'/%3E%3Ccircle cx='16.5' cy='8.5' r='2.2'/%3E%3C/g%3E%3Cg fill='%23ff3fa4'%3E%3Cellipse cx='44' cy='15' rx='5' ry='4.5'/%3E%3Ccircle cx='38.5' cy='8.5' r='2.2'/%3E%3Ccircle cx='42' cy='5' r='2.2'/%3E%3Ccircle cx='46' cy='5' r='2.2'/%3E%3Ccircle cx='49.5' cy='8.5' r='2.2'/%3E%3C/g%3E%3Cg fill='%23f4b400'%3E%3Cellipse cx='77' cy='15' rx='5' ry='4.5'/%3E%3Ccircle cx='71.5' cy='8.5' r='2.2'/%3E%3Ccircle cx='75' cy='5' r='2.2'/%3E%3Ccircle cx='79' cy='5' r='2.2'/%3E%3Ccircle cx='82.5' cy='8.5' r='2.2'/%3E%3C/g%3E%3C/svg%3E") repeat-x center;
+}
+.sleepy { width: 100%; }
+
+/* footer boxes */
+.foot {
+  display: grid; grid-template-columns: 1fr 1.5fr 1.5fr 1fr; gap: 14px; margin-top: 16px; align-items: stretch;
+}
+.fbox { padding: 12px; background: linear-gradient(180deg, #f3f3f8, #dcdbe8); border-color: #8d8cb0; border-radius: 4px; }
+.viewed p { margin: 0 0 6px; font-size: 17px; }
+.bv { display: flex; align-items: center; gap: 10px; }
+.bv img { width: 44px; height: 44px; }
+.bv b { font-size: 20px; line-height: 1.1; color: var(--navy); }
+.viewed small { display: block; margin-top: 6px; color: #4b4a66; }
+.toolbarbox { display: flex; gap: 12px; align-items: center; }
+.toolbarbox > img { width: 84px; flex: none; border-radius: 6px; }
+.toolbarbox > div { min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.toolbarbox h3 { text-align: left; font-size: 18px; }
+.tbrow { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.mini { display: flex; gap: 4px; padding: 4px 6px; background: #fff; border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh); }
+.mini img { width: 22px; height: 22px; object-fit: contain; }
+.mini svg { width: 22px; height: 22px; }
+.cool h3 { text-align: left; font-size: 18px; margin-bottom: 6px; }
+.cool ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; }
+.cool li { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.cool li.wide { grid-column: 1 / -1; }
+.cool a { font-weight: 700; text-transform: uppercase; font-size: 14px; cursor: pointer; }
+.broken { display: grid; grid-template-columns: 1fr auto; gap: 6px; align-items: end; }
+.broken h3 { grid-column: 1 / -1; font-size: 17px; }
+.bi { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 14px; }
+.bicon {
+  width: 38px; height: 44px; background: #fff; border: 2px solid var(--sh); position: relative;
+  font: 700 16px/40px var(--ui); text-align: center; transform: rotate(90deg); color: var(--ink);
+}
+.broken > img { width: 84px; }
+
+/* coin notepad */
+.notepad {
+  margin: 24px auto 0; max-width: 900px; background: var(--face);
+  border: 2px solid; border-color: var(--hi) var(--dk) var(--dk) var(--hi); box-shadow: 6px 6px 0 rgba(20, 20, 80, 0.35);
+}
+.np-menu { display: flex; gap: 16px; padding: 3px 10px; font-size: 14px; }
+.np-body {
+  background: #fff; margin: 0 3px 3px; padding: 16px 18px;
+  border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh);
+  font-family: "Courier New", Courier, monospace; font-size: 16px;
+}
+.np-body h2 { font-family: var(--pixel); font-size: 30px; color: var(--hot); margin-bottom: 6px; }
+.np-body p { margin: 0 0 12px; max-width: 70ch; }
+.facts { width: 100%; border-collapse: collapse; margin: 8px 0 12px; }
+.facts th, .facts td { text-align: left; padding: 5px 8px; border-bottom: 1px dashed #9a99b5; vertical-align: top; }
+.facts th { width: 30%; white-space: nowrap; }
 .facts td { overflow-wrap: anywhere; }
-.copyrow { display: flex; gap: 8px; align-items: flex-start; flex-wrap: wrap; }
-.copyrow code { min-width: 0; overflow-wrap: anywhere; background: var(--cream); padding: 1px 4px; }
-.links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
-.copystatus { font-size: 14px; color: var(--panel-dk); }
-.warn {
-  margin-top: 26px; border: 2px solid var(--warn); background: #fff0f0; padding: 10px 12px; font-size: 15px;
+.ca { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.ca code { background: #fff6c8; padding: 2px 6px; overflow-wrap: anywhere; min-width: 0; }
+.clinks { display: flex; gap: 10px; flex-wrap: wrap; margin: 4px 0 14px; }
+.clinks a { text-decoration: none; color: var(--ink); font-family: var(--ui); }
+.warn { border: 2px solid #c00030; background: #fff0f4; padding: 10px 12px; font-family: var(--ui); font-size: 15px; }
+.warn b { color: #c00030; }
+.copy { text-align: center; margin: 18px 0 0; font-size: 13px; color: #0d2b6b; }
+
+/* dialog */
+.dialog {
+  position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 50;
+  width: min(92vw, 400px); background: var(--face);
+  border: 2px solid; border-color: var(--hi) var(--dk) var(--dk) var(--hi); box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.45);
 }
-.warn b { color: var(--warn); }
-.footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 14px; margin-top: 22px; }
-.counter {
-  display: inline-flex; gap: 2px; font-weight: 700;
+.dialog .titlebar { font-size: 15px; }
+.dbody { display: flex; gap: 12px; align-items: flex-start; padding: 16px 16px 6px; }
+.dbody img { width: 56px; flex: none; }
+.dbody p { margin: 0; }
+.dprog { margin: 6px 16px 0; height: 20px; background: #fff; border: 2px solid; border-color: var(--sh) var(--hi) var(--hi) var(--sh); padding: 2px; }
+.dprog i { display: block; height: 100%; width: 0; background: repeating-linear-gradient(90deg, var(--navy) 0 12px, transparent 12px 15px); transition: width 0.25s linear; }
+.dact { display: flex; justify-content: center; padding: 12px; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 1080px) {
+  .layout { grid-template-columns: 200px minmax(0, 1fr); grid-template-areas: "left center" "right right"; }
+  .right { padding-top: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
+  .sticker { left: auto; right: -1%; top: -6%; width: 27%; transform: rotate(6deg); }
+  .band { grid-template-columns: 200px minmax(0, 1fr); }
+  .sleepy { display: none; }
+  .foot { grid-template-columns: 1fr 1fr; }
 }
-.counter i { font-style: normal; background: #000; color: #39ff14; padding: 0 5px; }
-.badge { border: 2px solid; border-color: var(--panel-hi) var(--panel-dk) var(--panel-dk) var(--panel-hi); background: var(--panel); padding: 2px 8px; }
+@media (max-width: 760px) {
+  body { font-size: 15px; }
+  .page { margin: 0 3px 3px; }
+  .layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "center" "right" "left"; }
+  .right { grid-template-columns: 1fr 1fr; }
+  .counterbox { grid-column: 1 / -1; }
+  .new { display: none; }
+  .nav { padding-top: 10px; display: grid; grid-template-columns: 1fr 1fr; }
+  .nav a { font-size: 17px; }
+  .left .pill { font-size: 17px; }
+  .rgrid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+  .rgrid-wrap { max-height: 300px; }
+  .band { grid-template-columns: minmax(0, 1fr); }
+  .construction { max-width: 240px; margin-inline: auto; }
+  .rlinks { font-size: 18px; }
+  .btn.big { flex: 1 1 100%; }
+  .menubar { gap: 12px; font-size: 14px; }
+  .tbtn { min-width: 58px; font-size: 13px; }
+  .tbtn img { width: 30px; height: 28px; }
+}
+@media (max-width: 460px) {
+  .right { grid-template-columns: minmax(0, 1fr); }
+  .foot { grid-template-columns: minmax(0, 1fr); }
+  .cool ul { grid-template-columns: minmax(0, 1fr); }
+  .titlebar { font-size: 14px; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .ticker p { animation: none; padding-left: 8px; }
-}
-@media (max-width: 480px) {
-  .page { padding-inline: 12px; }
-  .facts th { width: 40%; }
+  .runners, .throbber.busy svg { animation: none; }
+  .rgrid.fresh .tile { animation: none; }
+  .tile:hover img { transform: none; }
 }
 </style>
 </head>
 <body>
-<div class="win">
-  <div class="titlebar">
-    <span class="t">Ask Inu - Netscape Navigator</span>
-    <span class="tb-btns" aria-hidden="true"><i></i><i></i><i></i></span>
-  </div>
-  <div class="addr"><b>Location:</b><div>http://www.askinu.dog/</div></div>
-  <div class="ticker" aria-hidden="true"><p>*** WELCOME TO ASK INU *** THE WEB'S #1 DOG-ONLY SEARCH ENGINE *** ZERO REVENUE *** INFINITE DOG *** SITE UNDER CONSTRUCTION SINCE 1998 ***</p></div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="paw" viewBox="0 0 22 22"><g fill="currentColor"><ellipse cx="11" cy="15" rx="5.2" ry="4.6"/><circle cx="5" cy="8.5" r="2.4"/><circle cx="8.8" cy="4.6" r="2.4"/><circle cx="13.2" cy="4.6" r="2.4"/><circle cx="17" cy="8.5" r="2.4"/></g></symbol>
+</svg>
+
+<div class="win" id="top">
+  <header>
+    <div class="titlebar">
+      <img class="tb-ico" src="assets/globe.png" alt="">
+      <span class="tb-title">Netscape - [ AskInu - Search the web. Find only dog. ]</span>
+      <span class="tb-btns" aria-hidden="true"><i>_</i><i>&#9633;</i><i>&times;</i></span>
+    </div>
+    <div class="menubar" aria-hidden="true">
+      <span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>G</u>o</span><span><u>C</u>ommunicator</span><span><u>H</u>elp</span>
+    </div>
+    <div class="toolbar-row">
+      <div class="toolbar" role="toolbar" aria-label="Browser toolbar">
+        <button class="tbtn" type="button" data-act="back"><img src="assets/i-back.png" alt=""><span>Back</span></button>
+        <button class="tbtn" type="button" data-act="fwd"><img src="assets/i-fwd.png" alt=""><span>Forward</span></button>
+        <button class="tbtn" type="button" data-act="home"><img src="assets/i-home.png" alt=""><span>Home</span></button>
+        <button class="tbtn" type="button" data-act="reload"><img src="assets/i-reload.png" alt=""><span>Reload</span></button>
+        <button class="tbtn" type="button" data-act="focus"><img src="assets/i-search.png" alt=""><span>Search</span></button>
+        <button class="tbtn" type="button" data-act="fav"><img src="assets/i-fav.png" alt=""><span>Favorites</span></button>
+        <button class="tbtn" type="button" data-act="share"><img src="assets/i-mail.png" alt=""><span>Mail</span></button>
+        <button class="tbtn" type="button" data-act="print"><img src="assets/i-print.png" alt=""><span>Print</span></button>
+      </div>
+      <div class="throbber" id="throbber" aria-hidden="true"><svg><use href="#paw"/></svg></div>
+    </div>
+    <div class="locbar">
+      <span class="lbl"><img src="assets/globe.png" alt="">Location:</span>
+      <div class="loc" id="loc">https://askinu.netlify.app/</div>
+      <label class="sr" for="quick">Quick dog questions</label>
+      <select class="quick" id="quick">
+        <option value="">What is dog?</option>
+        <option>what is dog</option>
+        <option>is dog</option>
+        <option>dog near me</option>
+        <option>why is dog</option>
+        <option>how many dogs is too many</option>
+      </select>
+    </div>
+  </header>
 
   <main class="page">
-    <section class="hero">
-      <div class="logo">
-        <svg viewBox="0 0 120 120" role="img" aria-label="Cartoon shiba inu face">
-          <polygon points="14,8 46,40 12,52" fill="#e8842c" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
-          <polygon points="106,8 74,40 108,52" fill="#e8842c" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
-          <polygon points="20,20 38,40 19,45" fill="#fff4d6"/>
-          <polygon points="100,20 82,40 101,45" fill="#fff4d6"/>
-          <ellipse cx="60" cy="68" rx="46" ry="40" fill="#e8842c" stroke="#111" stroke-width="3"/>
-          <ellipse cx="60" cy="86" rx="30" ry="22" fill="#fff4d6"/>
-          <ellipse cx="42" cy="52" rx="7" ry="4" fill="#fff4d6"/>
-          <ellipse cx="78" cy="52" rx="7" ry="4" fill="#fff4d6"/>
-          <circle cx="44" cy="66" r="5" fill="#111"/>
-          <circle cx="76" cy="66" r="5" fill="#111"/>
-          <circle cx="45.5" cy="64.5" r="1.6" fill="#fff"/>
-          <circle cx="77.5" cy="64.5" r="1.6" fill="#fff"/>
-          <ellipse cx="60" cy="79" rx="7" ry="5" fill="#111"/>
-          <path d="M60 84 Q60 94 50 94 M60 84 Q60 94 70 94" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/>
-          <path d="M55 95 Q60 108 65 95 Z" fill="#f28b9b" stroke="#111" stroke-width="2" stroke-linejoin="round"/>
-        </svg>
-        <h1>Ask Inu</h1>
-      </div>
-      <p class="tag">Search the web. Find only dog.</p>
+    <div class="layout">
+      <aside class="left">
+        <img class="new" src="assets/new.webp" alt="New!">
+        <nav class="box nav" aria-label="Dog directory">
+          <a href="#top" data-act="home"><img src="assets/s-house.png" alt=""><span>Home</span><svg class="paw"><use href="#paw"/></svg></a>
+          <a href="#results" data-q="search" data-mode="all"><img src="assets/s-mag.png" alt=""><span>Search</span><svg class="paw"><use href="#paw"/></svg></a>
+          <a href="#results" data-q="dog pictures" data-mode="images"><img src="assets/s-folder.png" alt=""><span>Images</span><svg class="paw"><use href="#paw"/></svg></a>
+          <a href="#results" data-q="dog videos" data-mode="videos"><img src="assets/s-folder.png" alt=""><span>Videos</span><svg class="paw"><use href="#paw"/></svg></a>
+          <a href="#results" data-q="breaking dog news" data-mode="all"><img src="assets/s-folder.png" alt=""><span>News</span><svg class="paw"><use href="#paw"/></svg></a>
+          <a href="#results" data-q="dogs near me" data-mode="all"><img src="assets/s-folder.png" alt=""><span>Maps</span><svg class="paw"><use href="#paw"/></svg></a>
+          <a href="#results" data-q="shibas" data-mode="all"><img src="assets/s-folder.png" alt=""><span>Shibas</span><svg class="paw"><use href="#paw"/></svg></a>
+          <a href="#results" data-q="more dogs" data-mode="all"><img src="assets/s-folder.png" alt=""><span>More Dogs</span><svg class="paw"><use href="#paw"/></svg></a>
+        </nav>
+        <a class="box pill" href="#" data-act="pawbook"><img src="assets/s-env.png" alt=""><span>Sign my Pawbook</span><b class="heart" aria-hidden="true">&#9829;</b></a>
+        <a class="box pill" href="#" data-act="guestbook"><img src="assets/s-book.png" alt=""><span>Guestbook</span></a>
+      </aside>
 
-      <form class="ask" id="askform" autocomplete="off">
-        <label for="q" hidden>Ask Inu anything</label>
-        <input type="text" id="q" name="q" value="best way to make money online" maxlength="60">
-        <div class="btnrow">
-          <button class="btn" type="submit" id="go">Ask Inu</button>
-          <button class="btn" type="button" id="lucky">I'm Feeling Barky</button>
+      <section class="center">
+        <div class="hero">
+          <img class="art" src="assets/hero.webp" width="736" height="404" alt="AskInu logo: a smiling shiba inu peeking over pink and orange letters next to a globe. Search the web. Find only dog.">
+          <img class="sticker" src="assets/sticker.webp" width="279" height="120" alt="Good dogs, good searches, a brighter internet">
         </div>
-      </form>
+
+        <form class="box searchbox" id="askform" autocomplete="off">
+          <div class="srow">
+            <label class="sr" for="q">Search for dogs</label>
+            <input type="text" id="q" name="q" value="shiba inu" maxlength="60">
+            <button class="btn big" type="submit">Search!</button>
+          </div>
+          <fieldset class="modes">
+            <legend class="sr">Search type</legend>
+            <label><input type="radio" name="mode" id="m-all" value="all" checked> All Dogs</label>
+            <label><input type="radio" name="mode" id="m-images" value="images"> Shibe Images</label>
+            <label><input type="radio" name="mode" id="m-videos" value="videos"> Shibe Videos</label>
+            <label><input type="radio" name="mode" id="m-adv" value="advanced"> Advanced Dog Search</label>
+          </fieldset>
+        </form>
+
+        <section class="results" id="results" aria-live="polite">
+          <div class="rbar">
+            <h2 id="rtitle">Search Results: shiba inu</h2>
+            <span class="count" id="rcount">About 1,000,000,000 dogs (0.01 seconds)</span>
+            <button class="xbtn" type="button" data-act="reload" aria-label="Shuffle results">&times;</button>
+          </div>
+          <div class="rgrid-wrap"><div class="rgrid" id="grid"></div></div>
+        </section>
+      </section>
+
+      <aside class="right">
+        <div class="box counterbox">
+          <h3>You are dog visitor #</h3>
+          <div class="leds"><svg class="paw pink"><use href="#paw"/></svg><span class="led" id="counter">00133742</span><svg class="paw pink"><use href="#paw"/></svg></div>
+        </div>
+        <div class="box dotd">
+          <h3><span aria-hidden="true">&#9819;</span> Dog of the Day</h3>
+          <img src="assets/dotd.webp" width="216" height="152" alt="Dog of the Day: a very happy cartoon shiba with its tongue out">
+          <p><span>Such beauty!<br>Much dog!<br>Very internet!</span><span class="heart" aria-hidden="true">&#9829;</span></p>
+        </div>
+        <div class="box savers">
+          <h3>Free Shiba Screensavers!</h3>
+          <div class="pair">
+            <img src="assets/saver1.webp" width="94" height="133" alt="Screensaver: a shiba floating in space">
+            <img src="assets/saver2.webp" width="95" height="133" alt="Screensaver: a shiba running through flowers under a rainbow">
+          </div>
+          <button class="btn dl" type="button" data-act="download">Download now!</button>
+        </div>
+      </aside>
+    </div>
+
+    <div class="band">
+      <img class="construction" src="assets/construction.webp" width="240" height="197" alt="Under construction: a shiba in a hard hat between two traffic cones">
+      <div class="rainbow">
+        <nav class="rlinks" aria-label="More">
+          <a href="#results" data-q="visit a dog">Visit</a><i>&#9670;</i>
+          <a href="#" data-act="focus">Search</a><i>&#9670;</i>
+          <a href="#" data-act="share">Share</a><i>&#9670;</i>
+          <a href="#results" data-q="good dogs">Good Dogs</a><i>&#9670;</i>
+          <a href="#results" data-q="always dogs">Always Dogs</a>
+        </nav>
+        <div class="runners" role="img" aria-label="A parade of shibas running across a rainbow"></div>
+        <div class="paws" aria-hidden="true"></div>
+      </div>
+      <img class="sleepy" src="assets/sleepy.webp" width="170" height="127" alt="">
+    </div>
+
+    <div class="foot">
+      <div class="box fbox viewed">
+        <p>Best Viewed in</p>
+        <div class="bv"><img src="assets/globe.png" alt=""><b>Netscape<br>Navigator 4.0</b></div>
+        <small>at 800 &times; 600, 256 colors</small>
+      </div>
+      <div class="box fbox toolbarbox">
+        <img src="assets/toolbar-dog.webp" width="90" height="100" alt="">
+        <div>
+          <h3>Get your AskInu toolbar!</h3>
+          <div class="tbrow">
+            <span class="mini" aria-hidden="true"><img src="assets/globe.png" alt=""><svg class="paw"><use href="#paw"/></svg></span>
+            <button class="btn" type="button" data-act="toolbar">Add to Browser!</button>
+          </div>
+        </div>
+      </div>
+      <div class="box fbox cool">
+        <h3>Cool links:</h3>
+        <ul>
+          <li><svg class="paw pink"><use href="#paw"/></svg><a href="#results" data-q="dog gifs" data-mode="videos">Dog GIFs</a></li>
+          <li><svg class="paw"><use href="#paw"/></svg><a href="#results" data-q="how to pet a dog">How to pet a dog</a></li>
+          <li><svg class="paw pink"><use href="#paw"/></svg><a href="#results" data-q="dog wallpapers" data-mode="images">Dog wallpapers</a></li>
+          <li><svg class="paw"><use href="#paw"/></svg><a href="#results" data-q="shiba merch">Shiba merch</a></li>
+          <li class="wide"><svg class="paw pink"><use href="#paw"/></svg><a href="#" data-act="share">Send this site to a friend!</a><span class="heart" aria-hidden="true">&#9829;</span></li>
+        </ul>
+      </div>
+      <div class="box fbox broken">
+        <h3>Broken image??</h3>
+        <div class="bi"><span class="bicon" aria-hidden="true">:(</span><span>Still a dog.</span></div>
+        <img src="assets/broken-dog.webp" width="90" height="86" alt="A shiba peeking in from the corner">
+      </div>
+    </div>
+
+    <section class="notepad" id="coin" aria-labelledby="coin-h">
+      <div class="titlebar"><span class="tb-title">askinu_coin.txt - Notepad</span><span class="tb-btns" aria-hidden="true"><i>&times;</i></span></div>
+      <div class="np-menu" aria-hidden="true"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>S</u>earch</span><span><u>H</u>elp</span></div>
+      <div class="np-body">
+        <h2 id="coin-h">$ASKINU</h2>
+        <p>AskInu is the web's #1 dog-only search engine, est. 1998. Ask it anything. It returns shiba. It is also a meme coin on Solana. No roadmap, no revenue, infinite dog.</p>
+        <table class="facts">
+          <tr><th>Ticker</th><td id="f-ticker">$ASKINU</td></tr>
+          <tr><th>Chain</th><td>Solana (pump.fun)</td></tr>
+          <tr><th>Utility</th><td>None. Pure meme.</td></tr>
+          <tr><th>Roadmap</th><td>Bork. Then more bork.</td></tr>
+          <tr><th>Contract</th><td id="f-ca"></td></tr>
+        </table>
+        <div class="clinks" id="clinks"></div>
+        <div class="warn"><b>Read this:</b> AskInu is a meme coin with no utility and no promises. It is not financial advice. Prices move fast and you can lose everything you put in. Only use money you can afford to lose, and check the contract address yourself before you trade.</div>
+      </div>
     </section>
 
-    <section class="results" id="results" aria-live="polite"></section>
-
-    <hr class="rule">
-
-    <h2>About the coin</h2>
-    <p>Ask Inu is a joke search engine and a meme coin. Nothing here is a real search engine, a company or a product. The only thing it does is return shiba.</p>
-    <table class="facts">
-      <tr><th>Name</th><td>Ask Inu</td></tr>
-      <tr><th>Ticker</th><td id="ticker">$ASKINU</td></tr>
-      <tr><th>Chain</th><td>Solana, launched on pump.fun</td></tr>
-      <tr><th>Utility</th><td>None. Pure meme.</td></tr>
-      <tr><th>Roadmap</th><td>Bork. Then more bork.</td></tr>
-      <tr><th>Contract</th><td id="contractcell"></td></tr>
-    </table>
-    <div class="links" id="links"></div>
-
-    <div class="warn">
-      <b>Read this:</b> Ask Inu is a meme coin with no utility and no promises. It is not financial advice. Prices move fast and you can lose everything you put in. Only use money you can afford to lose, and check the contract address yourself before you trade.
-    </div>
-
-    <div class="footer">
-      <div>You are visitor number <span class="counter" aria-label="000420"><i>0</i><i>0</i><i>0</i><i>4</i><i>2</i><i>0</i></span></div>
-      <div class="badge">Best viewed in Netscape 4.0 at 800x600</div>
-    </div>
+    <p class="copy">&copy; 1998&ndash;2026 AskInu&trade;. All dogs reserved. Meme coin, not financial advice.</p>
   </main>
+</div>
+
+<div class="dialog" id="dialog" role="alertdialog" aria-modal="true" aria-labelledby="dtitle" aria-describedby="dmsg" hidden>
+  <div class="titlebar"><span class="tb-title" id="dtitle">AskInu</span><button class="xbtn" type="button" data-act="dclose" aria-label="Close">&times;</button></div>
+  <div class="dbody"><img src="assets/dotd.webp" alt=""><p id="dmsg"></p></div>
+  <div class="dprog" id="dprog" hidden><i id="dbar"></i></div>
+  <div class="dact"><button class="btn" type="button" id="dok" data-act="dclose">OK</button></div>
 </div>
 
 <script>
@@ -234,168 +588,180 @@ hr.rule { border: 0; height: 4px; background: repeating-linear-gradient(90deg, v
 var CONFIG = {
   ticker: "$ASKINU",
   contract: "",
+  pumpfun: "",
   x: "",
-  telegram: "",
-  pumpfun: ""
+  telegram: ""
 };
 
 (function () {
-  var form = document.getElementById("askform");
-  var input = document.getElementById("q");
-  var box = document.getElementById("results");
-  var lucky = document.getElementById("lucky");
+  var $ = function (id) { return document.getElementById(id); };
+  var grid = $("grid"), input = $("q"), form = $("askform");
+  var TILES = [];
+  for (var i = 1; i <= 12; i++) TILES.push("assets/g" + i + ".webp");
+  var counter = 133742;
+  var hist = [], hpos = -1;
 
-  var LUCKY = [
-    "how to get rich quick",
-    "is my dog a good boy",
-    "what is a blockchain",
-    "free money no scam",
-    "who let the dogs out",
-    "how do i fix my computer",
-    "best pizza near me",
-    "meaning of life"
-  ];
-
-  function hash(s) {
-    var h = 7;
-    for (var i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) >>> 0; }
-    return h;
+  function shuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
   }
-  function slug(s) {
-    var r = s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-    return r || "dog";
-  }
-  function pick(list, seed, offset) { return list[(seed + offset) % list.length]; }
-  function el(tag, cls, text) {
-    var e = document.createElement(tag);
-    if (cls) e.className = cls;
-    if (text !== undefined) e.textContent = text;
-    return e;
-  }
+  function mode() { var m = form.querySelector("input[name=mode]:checked"); return m ? m.value : "all"; }
+  function setMode(v) { var m = form.querySelector("input[name=mode][value=" + v + "]"); if (m) m.checked = true; }
+  function fmt(n) { return n.toLocaleString("en-US"); }
 
-  function render(q) {
-    q = q.trim().slice(0, 60) || "dog";
-    var seed = hash(q.toLowerCase());
-    var count = 1999000 + (seed % 900);
-    var ms = (0.01 + (seed % 40) / 1000).toFixed(3);
-    var s = slug(q);
-
-    var hits = [
-      { t: q + " | The Official Shiba Fan Page", u: "www.shibaworld.dog/" + s + ".htm",
-        d: "We searched 1,999,999 pages for \"" + q + "\" and every single one was a shiba. This is the best one." },
-      { t: "Top 10 " + q + " Tips (All Written By Dogs)", u: "www.top10dogs.dog/" + s + "/index.html",
-        d: pick(["Tip 1: bork. Tip 2: bork louder. Tips 3 through 10: nap.",
-                 "Experts agree the answer is a good boy. Experts are shibas.",
-                 "Step 1: ask a dog. Step 2: the dog does not know. Step 3: treats."], seed, 0) },
-      { t: "Wikidog: " + q + ", the free dogcyclopedia", u: "wikidog.askinu.dog/wiki/" + s,
-        d: "From Wikidog, the free dogcyclopedia. \"" + q + "\" may refer to: a shiba, a different shiba, or a very small shiba." },
-      { t: "Who let the " + q + " out? (a shiba story)", u: "www.geocities.dog/~shiba/" + s + ".html",
-        d: "Best viewed with sound on. This page has a dancing dog GIF, a guestbook with 3 entries, and a webring." },
-      { t: "Buy " + q + " online (dog food only)", u: "www.pets-dot-inu.dog/cart?item=" + s,
-        d: pick(["Free shipping on orders over 40 lbs. We lose money on every sale and make it up in volume.",
-                 "Our burn rate is a bonfire. Please do not ask where the kibble went.",
-                 "Now with 10% more kibble and 100% fewer profits."], seed, 1) }
-    ];
-
-    box.textContent = "";
-
-    var stats = el("div", "stats");
-    stats.appendChild(el("span", null, "Searched for: " + q));
-    stats.appendChild(el("span", null, "About " + count.toLocaleString("en-US") + " dogs found (" + ms + " seconds)"));
-    box.appendChild(stats);
-
-    var dym = el("p", "dym");
-    dym.appendChild(document.createTextNode("Did you mean: "));
-    var dl = el("a", null, "shiba");
-    dl.href = "#";
-    dl.addEventListener("click", function (e) { e.preventDefault(); input.value = "shiba"; render("shiba"); });
-    dym.appendChild(dl);
-    dym.appendChild(document.createTextNode("?"));
-    box.appendChild(dym);
-
-    hits.forEach(function (h, i) {
-      var w = el("div", "hit");
-      var h3 = el("h3");
-      var a = el("a", null, h.t);
-      a.href = "#";
-      a.addEventListener("click", function (e) { e.preventDefault(); });
-      h3.appendChild(a);
-      w.appendChild(h3);
-      w.appendChild(el("div", "url", h.u));
-      w.appendChild(el("p", null, h.d));
-      box.appendChild(w);
-      if (i === 1) {
-        var sp = el("div", "sponsor");
-        sp.appendChild(el("small", null, "Sponsored link"));
-        sp.appendChild(el("b", null, "Your ad here. We accept dog treats."));
-        box.appendChild(sp);
-      }
+  function drawTiles(animate) {
+    var list = shuffle(TILES).concat(shuffle(TILES).slice(0, 6));
+    grid.textContent = "";
+    grid.className = "rgrid" + (mode() === "videos" ? " videos" : "") + (animate ? " fresh" : "");
+    list.forEach(function (src, n) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "tile";
+      b.setAttribute("aria-label", "Result " + (n + 1) + ": dog");
+      if (animate) b.style.animationDelay = (n * 30) + "ms";
+      var img = document.createElement("img");
+      img.src = src; img.alt = ""; img.width = 104; img.height = 104; 
+      b.appendChild(img);
+      b.addEventListener("click", function () { say("Result #" + (n + 1), "You clicked a dog. It is a good dog. All results are good dogs."); });
+      grid.appendChild(b);
     });
-
-    var more = el("div", "more");
-    more.appendChild(document.createTextNode("Result pages: "));
-    ["1", "2", "3", "Next"].forEach(function (n, i) {
-      if (i === 0) { more.appendChild(el("b", null, n)); return; }
-      var a = el("a", null, n);
-      a.href = "#";
-      a.addEventListener("click", function (e) { e.preventDefault(); });
-      more.appendChild(a);
-    });
-    box.appendChild(more);
   }
 
-  form.addEventListener("submit", function (e) { e.preventDefault(); render(input.value); });
-  lucky.addEventListener("click", function () {
-    var q = LUCKY[Math.floor(Math.random() * LUCKY.length)];
+  function run(q, opts) {
+    opts = opts || {};
+    q = (q || "").trim().slice(0, 60) || "dog";
     input.value = q;
-    render(q);
-  });
-
-  /* Coin panel from CONFIG */
-  document.getElementById("ticker").textContent = CONFIG.ticker;
-  var cell = document.getElementById("contractcell");
-  if (CONFIG.contract) {
-    var row = el("div", "copyrow");
-    var code = el("code", null, CONFIG.contract);
-    var cb = el("button", "btn", "Copy");
-    cb.type = "button";
-    var st = el("span", "copystatus");
-    cb.addEventListener("click", function () {
-      function fallback() {
-        var r = document.createRange();
-        r.selectNodeContents(code);
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(r);
-        st.textContent = "Selected. Press Ctrl+C.";
-      }
-      try {
-        navigator.clipboard.writeText(CONFIG.contract).then(function () {
-          st.textContent = "Copied.";
-        }, fallback);
-      } catch (err) { fallback(); }
-    });
-    row.appendChild(code);
-    row.appendChild(cb);
-    row.appendChild(st);
-    cell.appendChild(row);
-  } else {
-    cell.textContent = "Announced at launch. Do not trust any address until it appears here and on the official pump.fun page.";
+    var m = mode();
+    var secs = (0.01 + Math.random() * 0.04).toFixed(2);
+    var n = 1000000000 + Math.floor(Math.random() * 999999);
+    if (m === "advanced") {
+      $("rtitle").textContent = "Advanced Dog Search: " + q;
+      $("rcount").textContent = "Filters: dog. Results: also dog.";
+    } else {
+      $("rtitle").textContent = (m === "videos" ? "Shibe Videos: " : m === "images" ? "Shibe Images: " : "Search Results: ") + q;
+      $("rcount").textContent = "About " + fmt(n) + " dogs (" + secs + " seconds)";
+    }
+    var th = $("throbber"); th.classList.add("busy");
+    setTimeout(function () { th.classList.remove("busy"); }, 700);
+    drawTiles(!opts.quiet);
+    counter += 1;
+    $("counter").textContent = String(counter).padStart(8, "0");
+    if (!opts.nohist) { hist = hist.slice(0, hpos + 1); hist.push(q); hpos = hist.length - 1; }
+    if (!opts.quiet) try {
+      var u = new URL(location.href);
+      u.search = "?q=" + encodeURIComponent(q);
+      history.replaceState(null, "", u);
+      $("loc").textContent = u.href;
+    } catch (e) {}
+    if (opts.scroll) $("results").scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  var links = document.getElementById("links");
+  /* dialog */
+  var dlg = $("dialog"), lastFocus = null, progTimer = null;
+  function say(title, msg, progress) {
+    lastFocus = document.activeElement;
+    $("dtitle").textContent = title;
+    $("dmsg").textContent = msg;
+    var p = $("dprog"), bar = $("dbar");
+    clearInterval(progTimer);
+    p.hidden = !progress;
+    if (progress) {
+      var pct = 0; bar.style.width = "0";
+      $("dok").hidden = true;
+      progTimer = setInterval(function () {
+        pct = Math.min(99, pct + 7 + Math.random() * 12);
+        bar.style.width = pct + "%";
+        if (pct >= 99) {
+          clearInterval(progTimer);
+          $("dmsg").textContent = progress;
+          $("dok").hidden = false; $("dok").focus();
+        }
+      }, 220);
+    } else {
+      $("dok").hidden = false;
+    }
+    dlg.hidden = false;
+    if (!progress) $("dok").focus();
+  }
+  function closeDlg() {
+    clearInterval(progTimer);
+    dlg.hidden = true;
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !dlg.hidden) closeDlg(); });
+
+  function share() {
+    var url = location.origin + "/";
+    var text = "AskInu: search the web, find only dog. $ASKINU";
+    if (navigator.share) {
+      navigator.share({ title: "AskInu", text: text, url: url }).catch(function () {});
+      return;
+    }
+    function done() { say("Mail", "Link copied. Paste it to a friend who needs more dog: " + url); }
+    try {
+      navigator.clipboard.writeText(url).then(done, function () { say("Mail", "Send your friend this link: " + url); });
+    } catch (e) { say("Mail", "Send your friend this link: " + url); }
+  }
+
+  var ACTS = {
+    back: function () { if (hpos > 0) { hpos--; run(hist[hpos], { nohist: true }); } else say("Back", "There is no going back. Only dog."); },
+    fwd: function () { if (hpos < hist.length - 1) { hpos++; run(hist[hpos], { nohist: true }); } else say("Forward", "The future is also dog."); },
+    home: function () { window.scrollTo({ top: 0, behavior: "smooth" }); },
+    reload: function () { run(input.value, { nohist: true }); },
+    focus: function () { input.focus(); input.select(); input.scrollIntoView({ behavior: "smooth", block: "center" }); },
+    fav: function () { say("Favorites", "AskInu has been added to your heart. Press Ctrl+D to add it to your browser too."); },
+    share: share,
+    print: function () { say("Print", "Printing 1,000,000,000 dogs. Please load more paper."); },
+    pawbook: function () { say("Pawbook", "The Pawbook is full of paw prints. Please try again in 1999."); },
+    guestbook: function () { say("Guestbook", "3 entries. All of them say \"bork\"."); },
+    download: function () { say("Installing shiba_saver.scr", "Installing Shiba Screensaver...", "Done. Your screen is now dog. (There is no real screensaver. It is 1998 in here.)"); },
+    toolbar: function () { say("AskInu Toolbar", "AskInu Toolbar installed. Your browser now has 40% more dog. (Not really. It's a meme coin.)"); },
+    dclose: closeDlg
+  };
+
+  document.addEventListener("click", function (e) {
+    var el = e.target.closest("[data-act],[data-q]");
+    if (!el) return;
+    if (el.tagName === "A") e.preventDefault();
+    if (el.dataset.q) {
+      if (el.dataset.mode) setMode(el.dataset.mode);
+      run(el.dataset.q, { scroll: true });
+    } else if (ACTS[el.dataset.act]) {
+      ACTS[el.dataset.act]();
+    }
+  });
+  form.addEventListener("submit", function (e) { e.preventDefault(); run(input.value); });
+  form.addEventListener("change", function (e) { if (e.target.name === "mode") run(input.value, { nohist: true }); });
+  $("quick").addEventListener("change", function () { if (this.value) { run(this.value, { scroll: true }); } this.selectedIndex = 0; });
+
+  /* coin panel */
+  $("f-ticker").textContent = CONFIG.ticker;
+  var ca = $("f-ca");
+  if (CONFIG.contract) {
+    var wrap = document.createElement("div"); wrap.className = "ca";
+    var code = document.createElement("code"); code.textContent = CONFIG.contract;
+    var cb = document.createElement("button"); cb.type = "button"; cb.className = "btn"; cb.textContent = "Copy";
+    cb.addEventListener("click", function () {
+      function sel() { var r = document.createRange(); r.selectNodeContents(code); var s = getSelection(); s.removeAllRanges(); s.addRange(r); cb.textContent = "Selected"; }
+      try { navigator.clipboard.writeText(CONFIG.contract).then(function () { cb.textContent = "Copied"; }, sel); } catch (err) { sel(); }
+    });
+    wrap.appendChild(code); wrap.appendChild(cb); ca.appendChild(wrap);
+  } else {
+    ca.textContent = "Announced at launch. Don't trust any address until it appears here and on the official pump.fun page.";
+  }
   [["Buy on pump.fun", CONFIG.pumpfun], ["Follow on X", CONFIG.x], ["Join Telegram", CONFIG.telegram]].forEach(function (p) {
     if (!p[1]) return;
-    var a = el("a", "btn", p[0]);
-    a.href = p[1];
-    a.target = "_blank";
-    a.rel = "noopener noreferrer";
-    a.style.textDecoration = "none";
-    a.style.color = "var(--ink)";
-    links.appendChild(a);
+    var a = document.createElement("a"); a.className = "btn"; a.href = p[1]; a.target = "_blank"; a.rel = "noopener noreferrer"; a.textContent = p[0];
+    $("clinks").appendChild(a);
   });
 
-  render(input.value);
+  /* first render */
+  var start = "shiba inu";
+  try { var qp = new URLSearchParams(location.search).get("q"); if (qp) start = qp; } catch (e) {}
+  input.value = start;
+  run(start, { quiet: true });
+  $("counter").textContent = "00133742"; counter = 133742;
+  $("loc").textContent = location.href;
 })();
 </script>
 </body>
