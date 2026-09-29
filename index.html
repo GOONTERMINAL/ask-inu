@@ -1,0 +1,402 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Ask Inu: search the web, find only dog. A meme coin on Solana.">
+<title>Ask Inu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap">
+<style>
+/* Layout: one beveled 1998 browser window centered on a teal desktop; logo and search on top, results in the middle, coin info and disclaimer below. */
+:root {
+  --desktop: #008080;
+  --panel: #d4d0c8;
+  --panel-hi: #ffffff;
+  --panel-lo: #808080;
+  --panel-dk: #404040;
+  --ink: #111111;
+  --link: #0000ee;
+  --visited: #551a8b;
+  --shiba: #e8842c;
+  --shiba-dk: #b85f14;
+  --cream: #fff4d6;
+  --title-a: #000080;
+  --title-b: #1084d0;
+  --paper: #ffffff;
+  --warn: #b00020;
+  --display: "Bowlby One", "Arial Black", Impact, sans-serif;
+  --body: "Courier Prime", "Courier New", Courier, monospace;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--desktop);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.5;
+  padding-inline: 16px;
+  padding-block: 24px 40px;
+}
+a { color: var(--link); }
+a:visited { color: var(--visited); }
+.win {
+  max-width: 780px;
+  margin-inline: auto;
+  background: var(--panel);
+  border: 2px solid;
+  border-color: var(--panel-hi) var(--panel-dk) var(--panel-dk) var(--panel-hi);
+  box-shadow: 1px 1px 0 var(--ink), 6px 6px 0 rgba(0, 0, 0, 0.35);
+  padding: 3px;
+}
+.titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(90deg, var(--title-a), var(--title-b));
+  color: #fff;
+  padding: 3px 6px;
+  font-weight: 700;
+  font-size: 14px;
+}
+.titlebar span.t { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tb-btns { display: flex; gap: 3px; }
+.tb-btns i {
+  display: block; width: 18px; height: 16px; background: var(--panel);
+  border: 2px solid; border-color: var(--panel-hi) var(--panel-dk) var(--panel-dk) var(--panel-hi);
+}
+.addr {
+  display: flex; gap: 8px; align-items: center;
+  padding: 6px 4px; font-size: 14px;
+}
+.addr b { flex: none; }
+.addr div {
+  flex: 1; min-width: 0; background: var(--paper);
+  border: 2px solid; border-color: var(--panel-dk) var(--panel-hi) var(--panel-hi) var(--panel-dk);
+  padding: 1px 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.ticker {
+  background: #000; color: #39ff14; overflow: hidden; white-space: nowrap;
+  border: 2px solid; border-color: var(--panel-dk) var(--panel-hi) var(--panel-hi) var(--panel-dk);
+  font-size: 14px;
+}
+.ticker p { display: inline-block; margin: 0; padding-left: 100%; animation: roll 26s linear infinite; }
+@keyframes roll { to { transform: translateX(-100%); } }
+.page {
+  background: var(--paper);
+  margin-top: 6px;
+  border: 2px solid; border-color: var(--panel-dk) var(--panel-hi) var(--panel-hi) var(--panel-dk);
+  padding: 20px 16px 24px;
+}
+.hero { text-align: center; }
+.logo { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.logo svg { width: 96px; height: 96px; flex: none; }
+.logo h1 {
+  margin: 0; font-family: var(--display); font-weight: 400;
+  font-size: clamp(44px, 12vw, 76px); line-height: 1; letter-spacing: -1px;
+  color: var(--shiba);
+  text-shadow: 3px 3px 0 var(--shiba-dk), 5px 5px 0 var(--ink);
+}
+.tag { margin: 10px 0 18px; font-style: italic; }
+form.ask { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.ask input[type="text"] {
+  width: min(100%, 520px); font: inherit; padding: 6px 8px; color: var(--ink); background: var(--paper);
+  border: 2px solid; border-color: var(--panel-dk) var(--panel-hi) var(--panel-hi) var(--panel-dk);
+}
+.btnrow { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.btn {
+  font: inherit; font-weight: 700; color: var(--ink); background: var(--panel); cursor: pointer;
+  padding: 5px 14px; border: 2px solid; border-color: var(--panel-hi) var(--panel-dk) var(--panel-dk) var(--panel-hi);
+  box-shadow: inset -1px -1px 0 var(--panel-lo);
+}
+.btn:active { border-color: var(--panel-dk) var(--panel-hi) var(--panel-hi) var(--panel-dk); padding: 6px 13px 4px 15px; }
+.btn:focus-visible, .ask input:focus-visible, a:focus-visible { outline: 2px dotted var(--ink); outline-offset: 2px; }
+.results { margin-top: 26px; border-top: 2px solid var(--ink); padding-top: 12px; }
+.stats { font-size: 14px; background: #d6e4ff; padding: 3px 8px; display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.dym { margin: 14px 0 0; }
+.hit { margin: 18px 0 0; }
+.hit h3 { margin: 0; font-size: 18px; font-weight: 700; }
+.hit .url { color: #006400; font-size: 14px; overflow-wrap: anywhere; }
+.hit p { margin: 2px 0 0; }
+.sponsor { background: var(--cream); border: 1px dashed var(--shiba-dk); padding: 8px 10px; margin-top: 18px; }
+.sponsor small { display: block; color: var(--panel-dk); }
+.more { margin-top: 18px; text-align: center; font-size: 15px; }
+.more a { margin-inline: 4px; }
+h2 {
+  font-family: var(--display); font-weight: 400; font-size: 26px; margin: 34px 0 10px;
+  color: var(--shiba-dk); text-wrap: balance;
+}
+hr.rule { border: 0; height: 4px; background: repeating-linear-gradient(90deg, var(--shiba) 0 12px, var(--ink) 12px 16px); margin: 30px 0 0; }
+.facts {
+  width: 100%; border-collapse: collapse; font-size: 15px;
+}
+.facts th, .facts td { border: 2px solid; border-color: var(--panel-lo) var(--panel-hi) var(--panel-hi) var(--panel-lo); padding: 6px 10px; text-align: left; vertical-align: top; }
+.facts th { background: var(--panel); width: 34%; }
+.facts td { overflow-wrap: anywhere; }
+.copyrow { display: flex; gap: 8px; align-items: flex-start; flex-wrap: wrap; }
+.copyrow code { min-width: 0; overflow-wrap: anywhere; background: var(--cream); padding: 1px 4px; }
+.links { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.copystatus { font-size: 14px; color: var(--panel-dk); }
+.warn {
+  margin-top: 26px; border: 2px solid var(--warn); background: #fff0f0; padding: 10px 12px; font-size: 15px;
+}
+.warn b { color: var(--warn); }
+.footer { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 14px; margin-top: 22px; }
+.counter {
+  display: inline-flex; gap: 2px; font-weight: 700;
+}
+.counter i { font-style: normal; background: #000; color: #39ff14; padding: 0 5px; }
+.badge { border: 2px solid; border-color: var(--panel-hi) var(--panel-dk) var(--panel-dk) var(--panel-hi); background: var(--panel); padding: 2px 8px; }
+@media (prefers-reduced-motion: reduce) {
+  .ticker p { animation: none; padding-left: 8px; }
+}
+@media (max-width: 480px) {
+  .page { padding-inline: 12px; }
+  .facts th { width: 40%; }
+}
+</style>
+</head>
+<body>
+<div class="win">
+  <div class="titlebar">
+    <span class="t">Ask Inu - Netscape Navigator</span>
+    <span class="tb-btns" aria-hidden="true"><i></i><i></i><i></i></span>
+  </div>
+  <div class="addr"><b>Location:</b><div>http://www.askinu.dog/</div></div>
+  <div class="ticker" aria-hidden="true"><p>*** WELCOME TO ASK INU *** THE WEB'S #1 DOG-ONLY SEARCH ENGINE *** ZERO REVENUE *** INFINITE DOG *** SITE UNDER CONSTRUCTION SINCE 1998 ***</p></div>
+
+  <main class="page">
+    <section class="hero">
+      <div class="logo">
+        <svg viewBox="0 0 120 120" role="img" aria-label="Cartoon shiba inu face">
+          <polygon points="14,8 46,40 12,52" fill="#e8842c" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
+          <polygon points="106,8 74,40 108,52" fill="#e8842c" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
+          <polygon points="20,20 38,40 19,45" fill="#fff4d6"/>
+          <polygon points="100,20 82,40 101,45" fill="#fff4d6"/>
+          <ellipse cx="60" cy="68" rx="46" ry="40" fill="#e8842c" stroke="#111" stroke-width="3"/>
+          <ellipse cx="60" cy="86" rx="30" ry="22" fill="#fff4d6"/>
+          <ellipse cx="42" cy="52" rx="7" ry="4" fill="#fff4d6"/>
+          <ellipse cx="78" cy="52" rx="7" ry="4" fill="#fff4d6"/>
+          <circle cx="44" cy="66" r="5" fill="#111"/>
+          <circle cx="76" cy="66" r="5" fill="#111"/>
+          <circle cx="45.5" cy="64.5" r="1.6" fill="#fff"/>
+          <circle cx="77.5" cy="64.5" r="1.6" fill="#fff"/>
+          <ellipse cx="60" cy="79" rx="7" ry="5" fill="#111"/>
+          <path d="M60 84 Q60 94 50 94 M60 84 Q60 94 70 94" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/>
+          <path d="M55 95 Q60 108 65 95 Z" fill="#f28b9b" stroke="#111" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+        <h1>Ask Inu</h1>
+      </div>
+      <p class="tag">Search the web. Find only dog.</p>
+
+      <form class="ask" id="askform" autocomplete="off">
+        <label for="q" hidden>Ask Inu anything</label>
+        <input type="text" id="q" name="q" value="best way to make money online" maxlength="60">
+        <div class="btnrow">
+          <button class="btn" type="submit" id="go">Ask Inu</button>
+          <button class="btn" type="button" id="lucky">I'm Feeling Barky</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="results" id="results" aria-live="polite"></section>
+
+    <hr class="rule">
+
+    <h2>About the coin</h2>
+    <p>Ask Inu is a joke search engine and a meme coin. Nothing here is a real search engine, a company or a product. The only thing it does is return shiba.</p>
+    <table class="facts">
+      <tr><th>Name</th><td>Ask Inu</td></tr>
+      <tr><th>Ticker</th><td id="ticker">$ASKINU</td></tr>
+      <tr><th>Chain</th><td>Solana, launched on pump.fun</td></tr>
+      <tr><th>Utility</th><td>None. Pure meme.</td></tr>
+      <tr><th>Roadmap</th><td>Bork. Then more bork.</td></tr>
+      <tr><th>Contract</th><td id="contractcell"></td></tr>
+    </table>
+    <div class="links" id="links"></div>
+
+    <div class="warn">
+      <b>Read this:</b> Ask Inu is a meme coin with no utility and no promises. It is not financial advice. Prices move fast and you can lose everything you put in. Only use money you can afford to lose, and check the contract address yourself before you trade.
+    </div>
+
+    <div class="footer">
+      <div>You are visitor number <span class="counter" aria-label="000420"><i>0</i><i>0</i><i>0</i><i>4</i><i>2</i><i>0</i></span></div>
+      <div class="badge">Best viewed in Netscape 4.0 at 800x600</div>
+    </div>
+  </main>
+</div>
+
+<script>
+/* Fill these in once the coin is live. Empty values stay hidden. */
+var CONFIG = {
+  ticker: "$ASKINU",
+  contract: "",
+  x: "",
+  telegram: "",
+  pumpfun: ""
+};
+
+(function () {
+  var form = document.getElementById("askform");
+  var input = document.getElementById("q");
+  var box = document.getElementById("results");
+  var lucky = document.getElementById("lucky");
+
+  var LUCKY = [
+    "how to get rich quick",
+    "is my dog a good boy",
+    "what is a blockchain",
+    "free money no scam",
+    "who let the dogs out",
+    "how do i fix my computer",
+    "best pizza near me",
+    "meaning of life"
+  ];
+
+  function hash(s) {
+    var h = 7;
+    for (var i = 0; i < s.length; i++) { h = (h * 31 + s.charCodeAt(i)) >>> 0; }
+    return h;
+  }
+  function slug(s) {
+    var r = s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    return r || "dog";
+  }
+  function pick(list, seed, offset) { return list[(seed + offset) % list.length]; }
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+
+  function render(q) {
+    q = q.trim().slice(0, 60) || "dog";
+    var seed = hash(q.toLowerCase());
+    var count = 1999000 + (seed % 900);
+    var ms = (0.01 + (seed % 40) / 1000).toFixed(3);
+    var s = slug(q);
+
+    var hits = [
+      { t: q + " | The Official Shiba Fan Page", u: "www.shibaworld.dog/" + s + ".htm",
+        d: "We searched 1,999,999 pages for \"" + q + "\" and every single one was a shiba. This is the best one." },
+      { t: "Top 10 " + q + " Tips (All Written By Dogs)", u: "www.top10dogs.dog/" + s + "/index.html",
+        d: pick(["Tip 1: bork. Tip 2: bork louder. Tips 3 through 10: nap.",
+                 "Experts agree the answer is a good boy. Experts are shibas.",
+                 "Step 1: ask a dog. Step 2: the dog does not know. Step 3: treats."], seed, 0) },
+      { t: "Wikidog: " + q + ", the free dogcyclopedia", u: "wikidog.askinu.dog/wiki/" + s,
+        d: "From Wikidog, the free dogcyclopedia. \"" + q + "\" may refer to: a shiba, a different shiba, or a very small shiba." },
+      { t: "Who let the " + q + " out? (a shiba story)", u: "www.geocities.dog/~shiba/" + s + ".html",
+        d: "Best viewed with sound on. This page has a dancing dog GIF, a guestbook with 3 entries, and a webring." },
+      { t: "Buy " + q + " online (dog food only)", u: "www.pets-dot-inu.dog/cart?item=" + s,
+        d: pick(["Free shipping on orders over 40 lbs. We lose money on every sale and make it up in volume.",
+                 "Our burn rate is a bonfire. Please do not ask where the kibble went.",
+                 "Now with 10% more kibble and 100% fewer profits."], seed, 1) }
+    ];
+
+    box.textContent = "";
+
+    var stats = el("div", "stats");
+    stats.appendChild(el("span", null, "Searched for: " + q));
+    stats.appendChild(el("span", null, "About " + count.toLocaleString("en-US") + " dogs found (" + ms + " seconds)"));
+    box.appendChild(stats);
+
+    var dym = el("p", "dym");
+    dym.appendChild(document.createTextNode("Did you mean: "));
+    var dl = el("a", null, "shiba");
+    dl.href = "#";
+    dl.addEventListener("click", function (e) { e.preventDefault(); input.value = "shiba"; render("shiba"); });
+    dym.appendChild(dl);
+    dym.appendChild(document.createTextNode("?"));
+    box.appendChild(dym);
+
+    hits.forEach(function (h, i) {
+      var w = el("div", "hit");
+      var h3 = el("h3");
+      var a = el("a", null, h.t);
+      a.href = "#";
+      a.addEventListener("click", function (e) { e.preventDefault(); });
+      h3.appendChild(a);
+      w.appendChild(h3);
+      w.appendChild(el("div", "url", h.u));
+      w.appendChild(el("p", null, h.d));
+      box.appendChild(w);
+      if (i === 1) {
+        var sp = el("div", "sponsor");
+        sp.appendChild(el("small", null, "Sponsored link"));
+        sp.appendChild(el("b", null, "Your ad here. We accept dog treats."));
+        box.appendChild(sp);
+      }
+    });
+
+    var more = el("div", "more");
+    more.appendChild(document.createTextNode("Result pages: "));
+    ["1", "2", "3", "Next"].forEach(function (n, i) {
+      if (i === 0) { more.appendChild(el("b", null, n)); return; }
+      var a = el("a", null, n);
+      a.href = "#";
+      a.addEventListener("click", function (e) { e.preventDefault(); });
+      more.appendChild(a);
+    });
+    box.appendChild(more);
+  }
+
+  form.addEventListener("submit", function (e) { e.preventDefault(); render(input.value); });
+  lucky.addEventListener("click", function () {
+    var q = LUCKY[Math.floor(Math.random() * LUCKY.length)];
+    input.value = q;
+    render(q);
+  });
+
+  /* Coin panel from CONFIG */
+  document.getElementById("ticker").textContent = CONFIG.ticker;
+  var cell = document.getElementById("contractcell");
+  if (CONFIG.contract) {
+    var row = el("div", "copyrow");
+    var code = el("code", null, CONFIG.contract);
+    var cb = el("button", "btn", "Copy");
+    cb.type = "button";
+    var st = el("span", "copystatus");
+    cb.addEventListener("click", function () {
+      function fallback() {
+        var r = document.createRange();
+        r.selectNodeContents(code);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(r);
+        st.textContent = "Selected. Press Ctrl+C.";
+      }
+      try {
+        navigator.clipboard.writeText(CONFIG.contract).then(function () {
+          st.textContent = "Copied.";
+        }, fallback);
+      } catch (err) { fallback(); }
+    });
+    row.appendChild(code);
+    row.appendChild(cb);
+    row.appendChild(st);
+    cell.appendChild(row);
+  } else {
+    cell.textContent = "Announced at launch. Do not trust any address until it appears here and on the official pump.fun page.";
+  }
+
+  var links = document.getElementById("links");
+  [["Buy on pump.fun", CONFIG.pumpfun], ["Follow on X", CONFIG.x], ["Join Telegram", CONFIG.telegram]].forEach(function (p) {
+    if (!p[1]) return;
+    var a = el("a", "btn", p[0]);
+    a.href = p[1];
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    a.style.textDecoration = "none";
+    a.style.color = "var(--ink)";
+    links.appendChild(a);
+  });
+
+  render(input.value);
+})();
+</script>
+</body>
+</html>
